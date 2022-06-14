@@ -5,9 +5,11 @@
 package it.polito.tdp.PremierLeague;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +19,7 @@ import javafx.scene.control.TextField;
 public class FXMLController {
 	
 	private Model model;
+	private boolean entrato = false;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -44,17 +47,45 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	entrato = true;
+    	txtResult.clear();
+    	
+    	try {
+			double num = Double.parseDouble(txtGoals.getText());
+			model.creaGrafo(num);
+			txtResult.appendText("Grafo creato\n");
+			txtResult.appendText("# VERTICI: " + model.getNVertici() + "\n # ARCHI: " + model.getNArchi());
+		} catch (NumberFormatException e) {
+			throw e;
+		}
     }
 
     @FXML
     void doDreamTeam(ActionEvent event) {
-
+    	txtResult.clear();
+    	if(entrato) {
+    		try {
+				int numG = Integer.parseInt(txtK.getText());
+				txtResult.appendText(model.getDreamTeam(numG));
+			} catch (NumberFormatException e) {
+				throw e;
+			}	
+    	}
+    	else {
+    		txtResult.appendText("Creare prima il grafo");
+    	}
     }
 
     @FXML
     void doTopPlayer(ActionEvent event) {
-
+    	txtResult.clear();
+    	
+    	if(entrato) {
+    		txtResult.appendText(model.topPlayer());
+    	}
+    	else {
+    		txtResult.appendText("Creare prima il grafo");
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
